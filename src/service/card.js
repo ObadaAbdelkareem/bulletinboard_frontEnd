@@ -19,7 +19,8 @@ export default {
    createCard(card) {
      let obj = {
        title:card.title,
-       content:card.content
+       content:card.content,
+       comments:card.comments
      }
      return api.post(`post`,obj);
   }
