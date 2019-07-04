@@ -1,11 +1,12 @@
 <template>
   <div class="home">
    <div class="md-layout md-gutter">
-    <div class="md-layout-item">1</div>
+    <div class="md-layout-item"></div>
     <div class="md-layout-item">
       <md-table v-model="cards" md-card @md-selected="onSelect">
         <md-table-toolbar >
         <h1 class="md-title">cards list</h1>
+        <md-button type="submit" class="md-dense md-raised md-primary" @click.prevent="redirectToCreateCard">create card</md-button>
       </md-table-toolbar>
       <md-table-row slot="md-table-row" slot-scope="{ item }" :class="getClass(item)" md-selectable="single">
         <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
@@ -16,7 +17,7 @@
       </md-table-row>
     </md-table>
     </div>
-    <div class="md-layout-item">3</div>
+    <div class="md-layout-item"></div>
   </div>
   </div>
 </template>
@@ -55,6 +56,9 @@ export default {
       onSelect (item) {
         this.selected = item
         this.$router.push({name:"editCard",params:{id:item.id}})
+      },
+      redirectToCreateCard(){
+        this.$router.push({name:"createCard"});
       }
   }
 }

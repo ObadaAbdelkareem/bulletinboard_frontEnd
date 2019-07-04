@@ -33,25 +33,28 @@
                     <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>-->
                   </md-field>
                 </div>
+              </div>
 
-             
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item md-small-size-100" style="text-align:left;" >
+                  <input type="file" @change="uploadImage" ref="myInputFile" class="input-file">
+                </div>
               </div>
 
               <div class="md-layout md-gutter">
                 <div class="md-layout-item md-small-size-100">
                   <md-list>
                     <md-list-item v-for="(comment,index) in form.comments">
-                 
                       <md-field>
-                    <label for="comment"> comment {{index +1}}</label>
-                    <md-input
-                      name="comment"
-                      id="comment"
-                      autocomplete="given-name"
-                      v-model="form.comments[index].content"
-                      :disabled="sending"
-                    />
-                  </md-field>
+                        <label for="comment">comment {{index +1}}</label>
+                        <md-input
+                          name="comment"
+                          id="comment"
+                          autocomplete="given-name"
+                          v-model="form.comments[index].content"
+                          :disabled="sending"
+                        />
+                      </md-field>
                     </md-list-item>
                   </md-list>
                 </div>
@@ -60,7 +63,12 @@
 
             <md-card-actions>
               <md-button type="submit" class="md-primary" :disabled="sending">create card</md-button>
-              <md-button type="submit" class="md-primary" :disabled="sending" @click.prevent="addComment">add comment</md-button>
+              <md-button
+                type="submit"
+                class="md-primary"
+                :disabled="sending"
+                @click.prevent="addComment"
+              >add comment</md-button>
             </md-card-actions>
           </md-card>
         </form>
@@ -77,11 +85,9 @@ export default {
       form: {
         title: null,
         content: null,
-        comments:[
-          {content:""}
-        ]
+        comments: [{ content: "" }]
       },
-      comments:[],
+      comments: [],
       userSaved: false,
       sending: false,
       lastUser: null
@@ -99,16 +105,15 @@ export default {
 
   methods: {
     createCard() {
-      console.log("form",this.form)
-      debugger
+      console.log("form", this.form);
+      debugger;
       this.$store.dispatch("createCard", {
         card: this.form
       });
-      
     },
 
-    addComment(){
-      this.form.comments.push({content:""})
+    addComment() {
+      this.form.comments.push({ content: "" });
     }
   }
   // watch:{
@@ -120,7 +125,7 @@ export default {
 };
 </script>
 <style>
-.md-list-item-content{
-  padding: 0px ; 
+.md-list-item-content {
+  padding: 0px;
 }
 </style>
