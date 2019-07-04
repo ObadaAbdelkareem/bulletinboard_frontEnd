@@ -7,10 +7,12 @@ const state = {
 // getters
 const getters = {
   cards: state => {
+    console.log("cards list",state.cards)
     return state.cards;
   },
 
   cardItem:state=>{
+    console.log("cards item ",state.cardItem)
     return state.cardItem
   }
 };

@@ -11,7 +11,8 @@ export default {
    updateCard(card) {
      let obj = {
        title:card.title,
-       content:card.content
+       content:card.content,
+       comments:card.comments
      }
      return api.put(`post/${card.id}`,obj);
   },

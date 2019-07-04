@@ -43,10 +43,10 @@
                     <md-list-item v-for="(comment,index) in form.comments">
                  
                       <md-field>
-                    <label for="first-name"> comment {{index +1}}</label>
+                    <label for="comment"> comment {{index +1}}</label>
                     <md-input
-                      name="first-name"
-                      id="first-name"
+                      name="comment"
+                      id="comment"
                       autocomplete="given-name"
                       v-model="form.comments[index].content"
                       :disabled="sending"
