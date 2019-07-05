@@ -18,7 +18,6 @@
                       id="first-name"
                       autocomplete="given-name"
                       v-model="form.title"
-                      :disabled="sending"
                     />
                   </md-field>
                 </div>
@@ -29,15 +28,13 @@
                   <md-field>
                     <label for="email">content</label>
                     <md-textarea v-model="form.content" md-autogrow></md-textarea>
-                    <!-- <span class="md-error" v-if="!$v.form.email.required">The email is required</span>
-                    <span class="md-error" v-else-if="!$v.form.email.email">Invalid email</span>-->
                   </md-field>
                 </div>
               </div>
 
               <div class="md-layout md-gutter">
-                <div class="md-layout-item md-small-size-100" style="text-align:left;" >
-                  <input type="file" @change="uploadImage" ref="myInputFile" class="input-file">
+                <div class="md-layout-item md-small-size-100" style="text-align:left;">
+                  <input type="file" ref="file" @change="onSelect">
                 </div>
               </div>
 
@@ -52,7 +49,6 @@
                           id="comment"
                           autocomplete="given-name"
                           v-model="form.comments[index].content"
-                          :disabled="sending"
                         />
                       </md-field>
                     </md-list-item>
@@ -62,15 +58,15 @@
             </md-card-content>
 
             <md-card-actions>
-              <md-button type="submit" class="md-primary" :disabled="sending">create card</md-button>
+              <md-button type="submit" class="md-primary" >create card</md-button>
               <md-button
                 type="submit"
                 class="md-primary"
-                :disabled="sending"
                 @click.prevent="addComment"
               >add comment</md-button>
             </md-card-actions>
           </md-card>
+                <md-snackbar :md-active.sync="cardSaved">The card was saved with success!</md-snackbar>
         </form>
       </md-card-content>
     </md-card-content>
@@ -78,7 +74,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-
+import api from "../../src/service/card.js";
 export default {
   data() {
     return {
@@ -88,40 +84,63 @@ export default {
         comments: [{ content: "" }]
       },
       comments: [],
-      userSaved: false,
-      sending: false,
-      lastUser: null
+      file: "",
+      cardSaved:false
     };
   },
 
-  created() {
-    this.$store.dispatch("getCard", {
-      postId: this.$route.params.id
-    });
-  },
+  
   computed: {
     ...mapGetters(["cardItem"])
   },
 
   methods: {
-    createCard() {
+    async createCard() {
       console.log("form", this.form);
       debugger;
-      this.$store.dispatch("createCard", {
+      try{
+        this.$store.dispatch("createCard", {
         card: this.form
       });
+
+     this.cardSaved = true
+
+      }catch(error){
+        console.log("error",error)
+      }
+      const formData = new FormData();
+      formData.append("file", this.file);
+      try {
+        const formData = new FormData();
+        formData.append("file", this.file);
+
+        await api.uploadImage(formData);
+        this.message = "Uploaded Image successfully";
+      } catch (err) {
+        console.log(err);
+        this.message = err.response.data.error;
+      }
     },
 
     addComment() {
       this.form.comments.push({ content: "" });
+    },
+
+    onSelect() {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      const file = this.$refs.file.files[0];
+      this.file = file;
+      if (!allowedTypes.includes(file.type)) {
+        this.message = "Filetype is wrong!!";
+      }
+      if (file.size > 500000) {
+        this.message = "Too large, max size allowed is 500kb";
+      }
+    },
+    async onSubmit() {
+      
     }
   }
-  // watch:{
-  //     cardItem(newVal,oldVal){
-  //         this.form = newVal
-  //         debugger
-  //     }
-  // }
 };
 </script>
 <style>

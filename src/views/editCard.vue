@@ -54,9 +54,15 @@
 
             <md-card-actions>
               <md-button type="submit" class="md-primary" :disabled="sending">edit card</md-button>
-              <md-button type="submit" class="md-primary" :disabled="sending" @click.prevent="addComment">add comment</md-button>
+              <md-button
+                type="submit"
+                class="md-primary"
+                :disabled="sending"
+                @click.prevent="addComment"
+              >add comment</md-button>
             </md-card-actions>
           </md-card>
+          <md-snackbar :md-active.sync="cardUpdated">The card was updated with success!</md-snackbar>
         </form>
       </div>
     </div>
@@ -71,9 +77,9 @@ export default {
       form: {
         title: null,
         content: null,
-        comments:[]
+        comments: []
       },
-      userSaved: false,
+      cardUpdated: false,
       sending: false,
       lastUser: null
     };
@@ -90,12 +96,17 @@ export default {
 
   methods: {
     editCard() {
-      this.$store.dispatch("editCard", {
+      try{
+          this.$store.dispatch("editCard", {
         card: this.form
       });
+      this.cardUpdated= true
+      }catch(error){
+          console.log("error",error)
+      }
     },
-    addComment(){
-      this.form.comments.push({content:""})
+    addComment() {
+      this.form.comments.push({ content: "" });
     }
   },
   watch: {

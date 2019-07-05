@@ -24,6 +24,11 @@ export default {
        comments:card.comments
      }
      return api.post(`post`,obj);
+  },
+
+  uploadImage(formData){
+    console.log('uploadImage service')
+    return api.post("upload",formData)
   }
 
   
